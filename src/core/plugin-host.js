@@ -48,7 +48,9 @@ const pluginHost = () => {
     });
   };
 
-  const get = (name, plugin) => {};
+  const get = (name, type, plugin) => {
+    plugins.filter((item) => item.name === name && item.type === type);
+  };
 
   const subscribe = (subscription) => {
     subscriptions.add(subscription);
@@ -72,6 +74,7 @@ const pluginHost = () => {
     registTemplate,
     subscribe,
     broadcast,
+    get,
   };
 };
 
