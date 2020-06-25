@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {usePluginHost} from './plugin-host';
 import {usePositionContext} from './position';
 import {
@@ -13,24 +13,31 @@ const getTemplateId = () => {
 };
 
 const Template = ({children, name}) => {
-  const pluginHost = usePluginHost();
-  const getPosition = usePositionContext();
+  const likeThis = useRef (null);
+  const pluginHost = usePluginHost ();
+  const getPosition = usePositionContext ();
 
-  useEffect(() => {
-    const template = {
-      name,
-      type: TYPE_TEMPLATE,
-      getPosition,
-      id: getTemplateId(),
-      render: () => children,
-    };
+  useEffect (
+    () => {
+      likeThis.current = getTemplateId ();
 
-    pluginHost.registTemplate(template);
-    pluginHost.broadcast(EVENT_TEMPLATE_INIT, name);
-  }, []);
+      const template = {
+        getPosition,
+        name,
+        type: TYPE_TEMPLATE,
+        id: likeThis.current,
+        render: () => children,
+      };
 
-  useEffect(() => {
-    pluginHost.broadcast(EVENT_TEMPLATE_UPDATE, id);
+      pluginHost.registTemplate (template);
+      pluginHost.broadcast (EVENT_TEMPLATE_INIT, name);
+    },
+    [children, getPosition, name, pluginHost]
+  );
+
+  useEffect (() => {
+    likeThis.current &&
+      pluginHost.broadcast (EVENT_TEMPLATE_UPDATE, likeThis.current);
   });
 
   return null;
