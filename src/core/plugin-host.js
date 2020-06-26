@@ -1,25 +1,10 @@
 import React, {createContext, useContext} from 'react';
-import {
-  TYPE_PLUGIN,
-  TYPE_GETTER,
-  TYPE_ACTION,
-  TYPE_TEMPLATE,
-} from './constants';
 import {compareArray} from './utils';
-
-const getPluginPosition = getPosition => () => {
-  const postion = getPosition ();
-  return postion.slice (0, postion.length - 1);
-};
 
 const pluginHost = () => {
   const plugins = [];
-  const getCache = {
-    [TYPE_PLUGIN]: {},
-    [TYPE_GETTER]: {},
-    [TYPE_ACTION]: {},
-    [TYPE_TEMPLATE]: {},
-  };
+  const gettersCache = {};
+  const knownKeysCache = {};
   const subscriptions = new Set ();
 
   const _insertPlugin = (plugins, newPlugin) => {
@@ -48,30 +33,45 @@ const pluginHost = () => {
     plugins.splice (itemIndex, 1);
   };
 
-  const registGetter = getter => {};
+  const knownKeys = postfix => {
+    if (!knownKeysCache[postfix]) {
+      knownKeysCache[postfix] = Array.from (
+        plugins
+          .map (plugin => Object.keys (plugin))
+          .map (keys => keys.filter (key => key.endsWith (postfix))[0])
+          .filter (key => !!key)
+          .reduce ((acc, key) => acc.add (key), new Set ())
+      ).map (key => key.replace (postfix, ''));
+    }
+    return knownKeysCache[postfix];
+  };
 
-  const registAction = action => {};
+  const collect = (key, upTo) => {
+    if (!gettersCache[key]) {
+      gettersCache[key] = plugins
+        .map (plugin => plugin[key])
+        .filter (plugin => !!plugin);
+    }
+    if (!upTo) return gettersCache[key];
 
-  const registTemplate = template => {
-    const {getPosition: getTemplatePosition} = template;
-    regist ({
-      ...template,
-      getPluginPostion: getPluginPosition (getTemplatePosition),
+    const upToIndex = plugins.indexOf (upTo);
+    return gettersCache[key].filter (getter => {
+      const pluginIndex = plugins.findIndex (plugin => plugin[key] === getter);
+      return pluginIndex < upToIndex;
     });
   };
 
-  const collect = (name, type, upTo) => {
-    if (!getCache[type][name]) {
-      getCache[type][name] = plugins.filter (
-        item => item.name === name && item.type === type
-      );
-    }
+  const get = (key, upTo) => {
+    const plugins = collect (key, upTo);
 
-    if (!upTo) return getCache[type][name];
+    if (!plugins.length) return undefined;
 
-    const upToIndex = plugins.findIndex (upTo);
+    let result = plugins[0] ();
+    plugins.slice (1).forEach (plugin => {
+      result = plugin (result);
+    });
 
-    return getCache[type][name].slice (0, upToIndex);
+    return result;
   };
 
   const subscribe = subscription => {
@@ -83,7 +83,7 @@ const pluginHost = () => {
   };
 
   const broadcast = (event, message) => {
-    this.subscriptions.forEach (
+    subscriptions.forEach (
       subscription => subscription[event] && subscription[event] (message)
     );
   };
@@ -91,12 +91,11 @@ const pluginHost = () => {
   return {
     regist,
     unregist,
-    registGetter,
-    registAction,
-    registTemplate,
     subscribe,
     broadcast,
     collect,
+    get,
+    knownKeys,
   };
 };
 

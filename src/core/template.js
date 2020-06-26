@@ -1,11 +1,7 @@
 import {useEffect, useRef} from 'react';
 import {usePluginHost} from './plugin-host';
 import {usePositionContext} from './position';
-import {
-  TYPE_TEMPLATE,
-  EVENT_TEMPLATE_INIT,
-  EVENT_TEMPLATE_UPDATE,
-} from './constants';
+import {EVENT_TEMPLATE_INIT, EVENT_TEMPLATE_UPDATE} from './constants';
 
 let templateId = 0;
 const getTemplateId = () => {
@@ -22,14 +18,14 @@ const Template = ({children, name}) => {
       likeThis.current = getTemplateId ();
 
       const template = {
-        getPosition,
-        name,
-        type: TYPE_TEMPLATE,
-        id: likeThis.current,
-        render: () => children,
+        position: () => getPosition (),
+        [`${name}Template`]: {
+          id: likeThis.current,
+          render: () => children,
+        },
       };
 
-      pluginHost.registTemplate (template);
+      pluginHost.regist (template);
       pluginHost.broadcast (EVENT_TEMPLATE_INIT, name);
     },
     [children, getPosition, name, pluginHost]

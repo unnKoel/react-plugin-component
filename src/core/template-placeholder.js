@@ -5,11 +5,7 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
-import {
-  TYPE_TEMPLATE,
-  EVENT_TEMPLATE_INIT,
-  EVENT_TEMPLATE_UPDATE,
-} from './constants';
+import {EVENT_TEMPLATE_INIT, EVENT_TEMPLATE_UPDATE} from './constants';
 import {usePluginHost} from './plugin-host';
 
 const TemplateContext = createContext ({});
@@ -37,7 +33,7 @@ const TemplatePlaceholder = ({children: templatePlaceholder, ...props}) => {
   const findTemplate = props => {
     const {name, param} = props;
     if (name) {
-      const templates = pluginHost.collect (name, TYPE_TEMPLATE);
+      const templates = pluginHost.collect (name);
       return {
         templates: templates.reverse (),
         param,
