@@ -1,9 +1,9 @@
 import React, {createContext, useContext} from 'react';
 
-const PositionContext = createContext(() => []);
+const PositionContext = createContext (() => []);
 
 const usePositionContext = () => {
-  const getPosition = useContext(PositionContext);
+  const getPosition = useContext (PositionContext);
   return getPosition;
 };
 
@@ -13,7 +13,7 @@ const Position = ({children}) => {
   const memorizeCalculatePostion = (index, getParentPosition) => () => {
     if (memorizePostions[index]) return memorizePostions[index];
 
-    memorizePostions[index] = () => [...getParentPosition(), index];
+    memorizePostions[index] = () => [...getParentPosition (), index];
 
     return memorizePostions[index];
   };
@@ -21,17 +21,17 @@ const Position = ({children}) => {
   return (
     <PositionContext.Consumer>
       {(getParentPosition = () => []) => {
-        React.Children.map(children, (child, index) => {
+        return React.Children.map (children, (child, index) => {
           if (!child || !child.type) return child;
 
-          const currentElementPostion = memorizeCalculatePostion(
+          const currentElementPostion = memorizeCalculatePostion (
             index,
             getParentPosition
           );
 
           return (
             <PositionContext.Provider
-              key={String(index)}
+              key={String (index)}
               value={currentElementPostion}
             >
               {child}

@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {EVENT_TEMPLATE_INIT, EVENT_TEMPLATE_UPDATE} from './constants';
 import {usePluginHost} from './plugin-host';
+import useSingleton from '../hooks/use-singleton';
 
 const TemplateContext = createContext ({});
 
@@ -16,24 +17,21 @@ const TemplatePlaceholder = ({children: templatePlaceholder, ...props}) => {
   const templateHost = useContext (TemplateContext);
   const pluginHost = usePluginHost ();
 
-  useEffect (
-    () => {
-      pluginHost.subscribe ({
-        [EVENT_TEMPLATE_INIT]: name => {
-          props.name === name && forceUpdate ();
-        },
-        [EVENT_TEMPLATE_UPDATE]: id => {
-          template.current && template.current.id === id && forceUpdate ();
-        },
-      });
-    },
-    [pluginHost, props.name]
-  );
+  useSingleton (() => {
+    pluginHost.subscribe ({
+      [EVENT_TEMPLATE_INIT]: name => {
+        props.name === name && forceUpdate ();
+      },
+      [EVENT_TEMPLATE_UPDATE]: id => {
+        template.current && template.current.id === id && forceUpdate ();
+      },
+    });
+  });
 
   const findTemplate = props => {
     const {name, param} = props;
     if (name) {
-      const templates = pluginHost.collect (name);
+      const templates = pluginHost.collect (`${name}Template`);
       return {
         templates: templates.reverse (),
         param,

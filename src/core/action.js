@@ -45,6 +45,8 @@ const Action = ({name, action}) => {
     },
     [getPosition, name, pluginHost]
   );
+
+  return null;
 };
 
 export default Action;

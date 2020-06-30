@@ -7,7 +7,7 @@ const pluginHost = () => {
   const knownKeysCache = {};
   const subscriptions = new Set ();
 
-  const _insertPlugin = (plugins, newPlugin) => {
+  const _insertPlugin = newPlugin => {
     let insertIndex = plugins.findIndex (
       item => compareArray (newPlugin.getPosition (), item.getPosition ()) <= 0
     );
@@ -47,7 +47,7 @@ const pluginHost = () => {
   };
 
   const collect = (key, upTo) => {
-    if (!gettersCache[key]) {
+    if (!gettersCache[key] || !gettersCache[key].length) {
       gettersCache[key] = plugins
         .map (plugin => plugin[key])
         .filter (plugin => !!plugin);
@@ -100,9 +100,13 @@ const pluginHost = () => {
 };
 
 const {PluginHostProvider, usePluginHost, withPluginHost} = (() => {
-  const PluginHostContext = createContext (pluginHost ());
+  const PluginHostContext = createContext ();
 
-  const PluginHostProvider = PluginHostContext.Provider;
+  const PluginHostProvider = ({children}) => (
+    <PluginHostContext.Provider value={pluginHost ()}>
+      {children}
+    </PluginHostContext.Provider>
+  );
 
   const usePluginHost = () => {
     return useContext (PluginHostContext);

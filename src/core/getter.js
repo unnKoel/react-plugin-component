@@ -1,6 +1,7 @@
 import {useEffect, useRef} from 'react';
 import {usePluginHost} from './plugin-host';
 import {usePositionContext} from './position';
+import {EVENT_GETTER_UPDADE} from './constants';
 import {
   isTrackedDependenciesChanged,
   getAvailableGetters,
@@ -56,6 +57,10 @@ const Getter = ({name, value, computed}) => {
     },
     [computed, getPosition, name, pluginHost, value]
   );
+
+  useEffect (() => {
+    pluginHost.broadcast (EVENT_GETTER_UPDADE);
+  });
 
   return null;
 };

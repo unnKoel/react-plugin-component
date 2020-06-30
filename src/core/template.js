@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useLayoutEffect} from 'react';
 import {usePluginHost} from './plugin-host';
 import {usePositionContext} from './position';
 import {EVENT_TEMPLATE_INIT, EVENT_TEMPLATE_UPDATE} from './constants';
@@ -13,7 +13,7 @@ const Template = ({children, name}) => {
   const pluginHost = usePluginHost ();
   const getPosition = usePositionContext ();
 
-  useEffect (
+  useLayoutEffect (
     () => {
       likeThis.current = getTemplateId ();
 
@@ -36,6 +36,7 @@ const Template = ({children, name}) => {
       pluginHost.broadcast (EVENT_TEMPLATE_UPDATE, likeThis.current);
   });
 
+  console.log ('template');
   return null;
 };
 
