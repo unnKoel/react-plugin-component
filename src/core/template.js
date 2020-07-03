@@ -8,35 +8,32 @@ const getTemplateId = () => {
   return templateId++;
 };
 
-const Template = ({children, name}) => {
-  const likeThis = useRef (null);
-  const pluginHost = usePluginHost ();
-  const getPosition = usePositionContext ();
+const Template = ({children, name, predicate}) => {
+  const likeThis = useRef(null);
+  const pluginHost = usePluginHost();
+  const getPosition = usePositionContext();
 
-  useLayoutEffect (
-    () => {
-      likeThis.current = getTemplateId ();
+  useLayoutEffect(() => {
+    likeThis.current = getTemplateId();
 
-      const template = {
-        position: () => getPosition (),
-        [`${name}Template`]: {
-          id: likeThis.current,
-          render: () => children,
-        },
-      };
+    const template = {
+      position: () => getPosition(),
+      [`${name}Template`]: {
+        id: likeThis.current,
+        predicate: (params) => (predicate ? predicate(params) : true),
+        render: () => children,
+      },
+    };
 
-      pluginHost.regist (template);
-      pluginHost.broadcast (EVENT_TEMPLATE_INIT, name);
-    },
-    [children, getPosition, name, pluginHost]
-  );
+    pluginHost.regist(template);
+    pluginHost.broadcast(EVENT_TEMPLATE_INIT, name);
+  }, [children, getPosition, name, pluginHost, predicate]);
 
-  useEffect (() => {
+  useEffect(() => {
     likeThis.current &&
-      pluginHost.broadcast (EVENT_TEMPLATE_UPDATE, likeThis.current);
+      pluginHost.broadcast(EVENT_TEMPLATE_UPDATE, likeThis.current);
   });
 
-  console.log ('template');
   return null;
 };
 

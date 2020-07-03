@@ -17,13 +17,13 @@ const rows = [
     calories: 'Frozen yoghurt',
     fat: 159,
   },
-  {
-    calories: 'Ice cream sandwich',
-    fat: 237,
-  },
+  // {
+  //   calories: 'Ice cream sandwich',
+  //   fat: 237,
+  // },
 ];
 
-function App () {
+function App() {
   return (
     <div className="App">
       <Table colMetas={colsMetas} rows={rows} />
