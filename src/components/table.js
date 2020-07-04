@@ -38,7 +38,6 @@ const Table = ({children, rows = [], colMetas = []}) => {
           <Template name="tableBody">
             <TemplateConnector>
               {({rows, colMetas}) => {
-                console.log(rows, colMetas);
                 return (
                   <TableBody>
                     {rows.map((row) =>
@@ -61,7 +60,6 @@ const Table = ({children, rows = [], colMetas = []}) => {
 
           <Template name="tableCell" predicate={({type}) => type === DataType}>
             {(param) => {
-              console.log('param', param);
               return <TableCell>{param.data}</TableCell>;
             }}
           </Template>

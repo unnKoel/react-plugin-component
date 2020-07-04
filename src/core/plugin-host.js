@@ -18,7 +18,7 @@ const pluginHost = () => {
       insertIndex < plugins.length &&
       compareArray(newPlugin.position(), plugins[insertIndex].position()) === 0;
 
-    plugins.splice(insertIndex, isExist ? 0 : 1, newPlugin);
+    plugins.splice(insertIndex, isExist ? 1 : 0, newPlugin);
   };
 
   const regist = (plugin) => {
