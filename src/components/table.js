@@ -63,10 +63,12 @@ const Table = ({children, rows = [], colMetas = []}) => {
               return <TableCell>{param.data}</TableCell>;
             }}
           </Template>
+          {children}
         </Position>
       </Template>
     </PluginableComponent>
   );
 };
 
+export {DataType};
 export default Table;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from './components/table';
+import CheckboxTableCell from './components/plugin/checkbox-table-cell';
 
 const colsMetas = [
   {
@@ -26,7 +27,9 @@ const rows = [
 function App() {
   return (
     <div className="App">
-      <Table colMetas={colsMetas} rows={rows} />
+      <Table colMetas={colsMetas} rows={rows}>
+        <CheckboxTableCell />
+      </Table>
     </div>
   );
 }
