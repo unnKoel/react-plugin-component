@@ -1,4 +1,4 @@
-This a demo for validating plug-in development patterns on react component. 
+validating plug-in development patterns on react component. 
 
 during my daily coding work, find that the amount of common component's code gets bigger, with adding more feature. so I need a solution, if additional features can be integrate with component as a plug-in, it will be good.
 
