@@ -1,7 +1,7 @@
-validating plug-in development patterns on react component. 
+Validating a type of plugin pattern in developing React components. 
 
-during my daily coding work, find that the amount of common component's code gets bigger, with adding more feature. so I need a solution, if additional features can be integrate with component as a plug-in, it will be good.
+During my daily work, I found that the size of a generic component gets bigger and bigger when adding more features into it. So a solution that I desire is that a feature can be added into a component as a plugin to be combined, rather than coupled into a component.
 
-I found a open-source library `devextreme-reactive`, it introduce a plug-in development patterns on component. so I have learned source code it's, and abstract the mind mode.
+After a lot of efforts made, finally I found an open source repository called `devextreme-reactive` that introduces a plugin pattern of developing components. Thus I started to learn its source code in order to obtain the key idea, that inspires me to develop this pattern.
 
-the target of this demo is to validate the mind mode I abstact.
+The mean of this repository is to check if this plugin pattern is able to work well in developing low-code tool as a solution.   
