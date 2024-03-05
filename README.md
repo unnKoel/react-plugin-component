@@ -8,4 +8,4 @@ The mean of this repository is to check if the plugin pattern is able to be used
 
 The file that demonstrates using this plugin pattern is [table.js](https://github.com/unnKoel/react-plugin-component/blob/master/src/components/table.js).
 
-If you check out that, you would find that `tableHeader` component is used in the same level with `tableCell` component, that breaks nested composition of components. So we are able to separate the implementation and declaration of a component, that's the key to compose parts of a component in a declarative way.
+If you check out that, you would find that `tableHeader` component is used in the same level with `tableCell` component, that breaks nested composition of components. So we are able to separate the implementation and declaration of a component, that's the key to assemble parts of a component in a declarative way.
